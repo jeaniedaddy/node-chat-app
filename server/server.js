@@ -15,11 +15,21 @@ var io = socketIO(server);
 io.on('connection', (socket)=>{
     console.log('New user connected');
 
+    //message event handlers
+    socket.emit('newMessage',{ 
+        from: 'jeanie',
+        text: 'Hi jeanie',
+        createdAt: 123
+    });
+
+    socket.on('createMessage', (message)=>{
+        console.log('createMessage', message);
+    });
+
     socket.on('disconnect',()=>{
         console.log('User disconnected');
     });
 });
-
 
 server.listen(port,()=>{
     console.log(`server is running on ${port} port`);
