@@ -28,5 +28,24 @@ jQuery('#message-form').on('submit', function (e) {
     }, function (data) {
         console.log('good',data);
     });
-  });
-  
+});
+
+
+jQuery('#send-location').on('click', function(){
+    if(!navigator.geolocation){
+        return alert('no gelocation feature.');
+    };
+
+    navigator.geolocation.getCurrentPosition(function(locatoin){
+        console.log(location);
+        // socket.emit('createLocationMessage', {
+            
+        //     from: 'User',
+        //     text: jQuery('[name=message]').val()
+        //   }, function (data) {
+        //       console.log('good',data);
+        // });
+    }, function(){
+        alert('unable to fetch geolocation.');
+    });
+});
