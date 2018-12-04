@@ -25,13 +25,13 @@ io.on('connection', (socket) => {
   socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
     io.emit('newMessage', generateMessage(message.from, message.text));
-    callback('This is from the server.');
+    callback();
   });
 
   socket.on('createLocationMessage', (position, callback) => {
     console.log('createLocationMessage', position);
     io.emit('newLocationMessage', generateLocationMessage('Admin', position.latitude, position.longitude));
-    callback('This is from the server.');
+    callback();
   });
   
   socket.on('disconnect', () => {
