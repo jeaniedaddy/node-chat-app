@@ -19,8 +19,16 @@ socket.on('connect',function(){
 });
 
 socket.on('disconnect',function(){
-    console.log('disconnected from server');
 }); 
+
+socket.on('usersUdate',function(usersList){
+    var ol = $('<ol></ol>');
+    usersList.forEach(function(user){
+        ol.append(`<li>${user}</li>`);
+    });
+    $('#users').html(ol);
+    console.log('usersUpdate', usersList);
+});
 
 socket.on('newMessage',function(message){
 
@@ -29,7 +37,6 @@ socket.on('newMessage',function(message){
     console.log('newMessage', message);
 
     var html = Mustache.render(template,{
-        from: message.from,
         createdAt: formattedTime,
         text: message.text
     });
@@ -44,7 +51,6 @@ socket.on('newLocationMessage',function(message){
     console.log('newLocationMessage', message);
     
     var html = Mustache.render(template,{
-        from: message.from,
         createdAt: formattedTime,
         url: message.url
     });
@@ -58,7 +64,6 @@ jQuery('#message-form').on('submit', function (e) {
 
     var messageText = jQuery('[name=message]');
     socket.emit('createMessage', {
-      from: 'User',
       text: messageText.val()
     }, function (data) {
         messageText.val('');

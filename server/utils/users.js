@@ -19,18 +19,22 @@ class Users {
     }
 
     removeUser(id){
-
+        var user = this.users.find(u=> u.id === id);
+        this.users = this.users.filter(u=> u.id !== id);
+        return user; 
     }
 
     getUser(id){
-
+        var user = this.users.find(u => u.id === id);
+        // var user = this.users.filter((user)=> user.id === id)[0];
+        return user; 
     }
     getUserList(room){
         var usersInRoom = this.users.filter((user)=>{
-            user.room === room; 
+            return user.room === room; 
         });
-        var userList = usersInRoom.map((user)=>{user.name});
-        return userList; 
+        var namesArray = usersInRoom.map((user)=>{ return user.name;});
+        return namesArray; 
     }
 }
 
