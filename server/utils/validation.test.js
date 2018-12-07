@@ -21,4 +21,9 @@ describe('IsRealString', ()=>{
         expect(res).toBe(false);
     });
 
+    it('should return false for 0 lenth string',()=>{
+        var a = '';
+        var res = isRealString(a);
+        expect(res).toBe(false);
+    });
 });

@@ -37,6 +37,7 @@ socket.on('newMessage',function(message){
     console.log('newMessage', message);
 
     var html = Mustache.render(template,{
+        from: message.from,
         createdAt: formattedTime,
         text: message.text
     });
@@ -51,6 +52,7 @@ socket.on('newLocationMessage',function(message){
     console.log('newLocationMessage', message);
     
     var html = Mustache.render(template,{
+        from:message.from,
         createdAt: formattedTime,
         url: message.url
     });
