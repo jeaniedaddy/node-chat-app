@@ -29,12 +29,25 @@ class Users {
         // var user = this.users.filter((user)=> user.id === id)[0];
         return user; 
     }
+
+    isNewUser(name){
+         var user = this.users.find(u=>u.name === name.trim().toUpperCase());
+         if(user){
+            return false;
+         } else {
+            return true; 
+         }
+    }
     getUserList(room){
         var usersInRoom = this.users.filter((user)=>{
             return user.room === room; 
         });
         var namesArray = usersInRoom.map((user)=>{ return user.name;});
         return namesArray; 
+    }
+    getRoomList(){
+        var rooms = this.users.map(user=> user.room);
+        return rooms; 
     }
 }
 

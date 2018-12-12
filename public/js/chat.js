@@ -61,6 +61,11 @@ socket.on('newLocationMessage',function(message){
     scrollToBottom();
 });
 
+// socket.on('roomName', function(roomName){
+//     var roomName = $('#room-name');
+//     roomName.html(roomName);
+// });
+
 jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
 

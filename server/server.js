@@ -24,17 +24,28 @@ io.on('connection', (socket) => {
     if (!isRealString(params.name) || !isRealString(params.room)){
       return callback('Name and room name are required.');
     }
-    console.log('new user', {id: socket.id, name: params.name, room: params.room});
 
+    if (!users.isNewUser(params.name)){
+      return callback('Another same name user is in chatting. use differnt user name');
+    }
+
+    var user = {
+      id: socket.id,
+      name: params.name.trim().toUpperCase(),
+      room: params.room.trim().toUpperCase()
+    };
+
+    console.log('new user', user);
     
-    users.removeUser(socket.id);
-    users.addUser(socket.id, params.name, params.room);
-    socket.join(params.room);
+    users.removeUser(user.id);
+    users.addUser(user.id, user.name, user.room);
+    socket.join(user.room);
 
-    io.to(params.room).emit('usersUdate', users.getUserList(params.room));
+    // io.to(user.room).emit('roomName', user.room);
+    io.to(user.room).emit('usersUdate', users.getUserList(user.room));
 
     socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
-    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} joined`));
+    socket.broadcast.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} joined`));
     callback();
   });
 
@@ -64,9 +75,19 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     var user = users.removeUser(socket.id);
     console.log('user left', user);
-    io.to(user.room).emit('usersUdate', users.getUserList(user.room));
-    io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left.`))
+    
+    if(user){
+      io.to(user.room).emit('usersUdate', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left.`))
+    }
+    
   });
+});
+
+app.get('/rest_api/getRoomList',(req,res)=>{
+  var rooms = users.getRoomList();
+  console.log(rooms);
+  return res.send(rooms);
 });
 
 server.listen(port, () => {
